@@ -1,0 +1,86 @@
+﻿<form method="post" action="Registrar" id="formOffert" enctype="multipart/form-data">
+    <div class="container-fluid">
+        <div class="page-header row" style="margin-top: 0 !important;">
+            <div class="col-md-10 col-lg-10">
+                <h3><i class="fa fa-newspaper-o"></i>  Registrar una oferta </h3>
+            </div>
+            <div class="col-md-2 col-lg-2 text-right">
+                <br />
+                    @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" });
+            </div>
+        </div>
+        @if (ViewBag.Result != null && !ViewBag.Result)
+        {
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div class="alert alert-danger">
+                        @ViewBag.MessageResult
+                    </div>
+                </div>
+            </div>
+        }
+        else if(ViewBag.Result != null && ViewBag.Result)
+        {
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div class="alert alert-success">
+                        @ViewBag.MessageResult
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-4 col-lg-4">
+                <label>Categoria</label>
+                @Html.DropDownList("Categoria", new SelectList(ViewBag.Categoria, "Key", "Value"), new { @class = "form-control" })
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <label>Tipo</label>
+                @Html.DropDownList("Tipo", new SelectList(ViewBag.Tipo, "Key", "Value"), new { @class = "form-control" })
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <label>Compañia</label>
+                <input type="text" id="Compañia" name="Compañia" class="form-control" placeholder="Test Inc." />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4 col-lg-4">
+                <label>Logo</label>
+                <input type="file" id="Logo" name="Logo" class="form-control" />
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <label>URL</label>
+                <input type="text" id="URL" name="URL" class="form-control" placeholder="http://www.test.com.do" />
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <label>Posición</label>
+                <input type="text" id="Posicion" name="Posicion" class="form-control" placeholder="Representante de ..." />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4 col-lg-4">
+                <label>Ubicación</label>
+                <input type="text" id="Ubicacion" name="Ubicacion" class="form-control" placeholder="Santo Domingo, Santiago, etc... " />
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-8 col-lg-8">
+                <label>Descripción</label>
+                <textarea id="Descripcion" name="Descripcion" class="form-control" rows="6" cols="10" style="resize:none;" placeholder="Esta posicion requiere..."></textarea>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-8">
+                <button type="submit" id="btnRegistrar" class="btn btn-primary btn-custom-default">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Registrar
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/Scripts/ActionScripts/OfertasRegistrar.js"></script>

@@ -1,0 +1,84 @@
+﻿@using ProyectoISO700.Models.ModelView;
+@using PagedList
+@using PagedList.Mvc
+
+@model IPagedList<OfertaViewOut>
+@{
+    var criterio = ViewBag.Criterio as OfertaCriterio;
+
+    if (criterio == null)
+    {
+        criterio = new OfertaCriterio();
+    }
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="font-weight:bold !important;">Vacantes disponibles: @ViewBag.TotalRegistros</div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped table-hover" id="tblResultado">
+                    <thead>
+                        <tr>
+                            <th>Ubicación</th>
+                            <th>Posición</th>
+                            <th>Compañia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var it in Model)
+                        {
+                            <tr data-id="@it.id" 
+                                    data-href='@Url.Action("Detalle", "Ofertas", new { id = @it.id })'>
+                                <td>@it.location</td>
+                                <td>@it.position</td>
+                                <td>@it.company</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="paging" style="float: right;">
+                    @{var urlAction = ""; }
+                    @if (ViewBag.Criterio != null)
+                    {
+                        var criterioNew = (OfertaCriterio)ViewBag.Criterio;
+
+                        urlAction = Url.Action("Listado", "Ofertas", new
+                        {
+                            pagina = 1,
+                            Locacion = criterioNew.Nombre
+                        });
+
+                        @Html.PagedListPager(Model, pag => Url.Action("Listado", "Ofertas", new
+                        {
+                            pagina = pag,
+                            Locacion = criterioNew.Nombre
+                            
+                        }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+                        {
+                            HttpMethod = "GET",
+                            UpdateTargetId = "result"
+                        }))
+                    }
+                    else
+                    {
+                        @Html.PagedListPager(Model, pag => Url.Action("Listado", "Ofertas", new { pagina = pag }),
+                        PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+                        {
+                            HttpMethod = "GET",
+                            UpdateTargetId = "result",
+                            OnBegin = "onBeginLoading",
+                            OnSuccess = "onSuccessLoading"
+                        }))
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('tr[data-href]').on("dblclick", function () { document.location = $(this).data('href'); });
+    });
+</script>

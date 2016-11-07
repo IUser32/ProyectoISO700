@@ -1,0 +1,65 @@
+﻿<style>
+    #loading {
+        display: none;
+        text-align: center;
+    }
+
+    .pagination {
+        margin: auto !important;
+        margin-top: -15px !important;
+    }
+
+    tbody tr {
+        cursor: pointer;
+    }
+
+    #EsCampanaCallCenter, #IncluirRegistrosDuplicados {
+        width: 30px;
+        height: 30px;
+        position: relative;
+        top: -18px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="page-header" style="margin-top: 0 !important;">
+        <h3> <i class="fa fa-newspaper-o" aria-hidden="true"></i> Vacantes </h3>
+    </div>
+    @using (Ajax.BeginForm("Listado", "Ofertas",
+                                                        new AjaxOptions
+                                                        {
+
+                                                            UpdateTargetId = "result",
+                                                            HttpMethod = "GET",
+                                                            OnBegin = "onBeginLoading",
+                                                            OnSuccess = "onSuccessLoading"
+                                                        }, new { @class = "form-horizontal", role = "form", id = "frmBusqueda" }))
+    {
+        <div class="row">
+            <div id="campTodos" style="text-align: center">
+                <div class="col-lg-6 col-md-7 col-xs-7">
+                    <input id="Nombre" name="Nombre" placeholder="Nombre de la vacante..." class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" id="btnSubmit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2 pull-right">
+                @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" });
+            </div>
+        </div>
+    }
+    <hr />
+    <div class="row">
+        <div id="result" class="col-lg-12 col-md-12 col-xs-12">
+        </div>
+    </div>
+    <div id="loading">
+        @*<img src="~/Imagenes/ajaxSpinner.gif" width="120" />*@
+    </div>
+</div>
+
+<script src="~/Scripts/ActionScripts/OfertasListado.js"></script>
+

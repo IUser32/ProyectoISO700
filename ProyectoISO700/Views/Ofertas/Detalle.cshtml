@@ -1,0 +1,57 @@
+﻿@model ProyectoISO700.Models.ModelView.OfertaViewOut
+@if (Model == null)
+{
+    Response.Redirect("~/Ofertas/");
+}
+<div class="container-fluid">
+    <div class="page-header row" style="margin-top: 0 !important;">
+        <div class="col-md-10 col-lg-10">
+            <h3><i class="fa fa-newspaper-o"></i> @Model.company <small>@Model.location</small> </h3>
+        </div>
+        <div class="col-md-2 col-lg-2 text-right">
+            <br />
+            @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" });
+        </div>
+    </div>
+    <input type="hidden" id="id" name="id" value="@Model.id" />
+    @if (ViewBag.File != null)
+    {
+        <img src="data:image/jpeg;base64, @ViewBag.File" style="width:150px; height:150px; float:right;" />
+    }
+    else
+    {
+        <img src="~/img/default.png" style="width:150px; height:150px; float:right;" />
+    }
+    <div class="row">
+        <div class="col-md-5 col-lg-5">
+            <label>Posición</label>
+            <p>
+                @Model.position - (@Model.Type)
+            </p>
+        </div>
+        <div class="col-md-3 col-lg-3">
+            <label>Categoria</label>
+            <p>
+                @Model.name
+            </p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 col-lg-8">
+            <p style="text-align:justify; ">
+                @Model.description
+            </p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8 col-lg-8">
+            <p>
+                @Html.Raw(String.Format("¿Deseas aplicar? Visita nuestra página. <a href='[{0}]'>{0}</a>", Model.url))
+            </p>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/ActionScripts/OfertasDetalle.js"></script>
