@@ -19,5 +19,6 @@ namespace ProyectoISO700.Models.ModelView
         public string description { get; set; }
         public string url { get; set; }
         public byte[] logo { get; set; }
+        public int userId { get; set; }
     }
 }

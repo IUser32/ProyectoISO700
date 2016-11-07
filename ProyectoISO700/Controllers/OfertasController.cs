@@ -34,10 +34,12 @@ namespace ProyectoISO700.Controllers
             if (!id.HasValue)
                 return RedirectToAction("Index");
 
-            ViewBag.Authed = User.Identity.IsAuthenticated;
             var oferta = this.ObtenerOferta(id.Value);
-            ViewBag.PaginaRetorno = "Index";
-            if(oferta.logo != null)
+            if(oferta == null)
+                return RedirectToAction("Index");
+
+            ViewBag.PuedeModificar = this.ObtenerUserId(User.Identity.Name) == oferta.userId ? true : false;
+            if (oferta.logo != null)
                 ViewBag.File = Convert.ToBase64String(oferta.logo);
             return View(oferta);
         }
@@ -56,6 +58,7 @@ namespace ProyectoISO700.Controllers
         [HttpPost]
         public ActionResult Registrar(OfertaViewIn input)
         {
+            input.userId = ObtenerUserId(User.Identity.Name);
             var guardado = this.Guardar(input);
 
             ViewBag.Result = guardado;
@@ -66,6 +69,42 @@ namespace ProyectoISO700.Controllers
             ViewBag.Tipo = ObtenerTipo();
 
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult Modificar(int? id)
+        {
+            if (!id.HasValue)
+                return RedirectToAction("Index");
+
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("ErrorPermiso", "Home");
+
+            var oferta = this.ObtenerOferta(id.Value);
+            if (oferta == null)
+                return RedirectToAction("Index");
+
+            ViewBag.Categoria = ObtenerCategoria();
+            ViewBag.Tipo = ObtenerTipo();
+
+            return View(oferta);
+        }
+
+        [HttpPost]
+        public ActionResult Modificar(OfertaViewIn input)
+        {
+            var guardado = this.Update(input);
+
+            ViewBag.Result = guardado;
+            ViewBag.MessageResult = guardado ? "La oferta ha sido modificada correctamente." :
+                                                    "Ha ocurrido un error mientras se modificaba.";
+
+            ViewBag.Categoria = ObtenerCategoria();
+            ViewBag.Tipo = ObtenerTipo();
+
+            var oferta = this.ObtenerOferta(input.OfertaID);
+
+            return View(oferta);
         }
 
         public PartialViewResult Listado(OfertaCriterio criterio, int pagina = 1, int tamañopagina = 7)
@@ -160,7 +199,8 @@ namespace ProyectoISO700.Controllers
                 typeID = ofertaDB.typeID,
                 description = ofertaDB.description,
                 logo = ofertaDB.logo,
-                url = ofertaDB.url
+                url = ofertaDB.url,
+                userId = ofertaDB.userId
             };
         }
 
@@ -245,10 +285,37 @@ namespace ProyectoISO700.Controllers
                 location = input.Ubicacion,
                 position = input.Posicion,
                 url = input.URL,
-                logo = arrayByte
+                logo = arrayByte,
+                userId = input.userId
             };
 
             _context.Jobs.Add(inputDb);
+
+            var guardarCambios = _context.SaveChanges() > 0 ? true : false;
+
+            if (!guardarCambios)
+                return false;
+
+            return true;
+        }
+
+        private bool Update(OfertaViewIn input)
+        {
+            if (!validation(input))
+                return false;
+
+            var ofertaDb = _context.Jobs.FirstOrDefault(w => w.id == input.OfertaID);
+
+            //byte[] arrayByte = ReadToEnd(input.Logo.InputStream);
+
+            ofertaDb.category_id = input.Categoria;
+            ofertaDb.typeID = input.Tipo;
+            ofertaDb.company = input.Compañia;
+            ofertaDb.DateUpdated = DateTime.Now;
+            ofertaDb.description = input.Descripcion;
+            ofertaDb.location = input.Ubicacion;
+            ofertaDb.position = input.Posicion;
+            ofertaDb.url = input.URL;
 
             var guardarCambios = _context.SaveChanges() > 0 ? true : false;
 
@@ -277,6 +344,16 @@ namespace ProyectoISO700.Controllers
                 return false;
 
             return true;
+        }
+
+        private int ObtenerUserId(string username)
+        {
+            var user = _context.UserProfiles
+                                .FirstOrDefault(w => w.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
+            if (user == null)
+                return 0;
+
+            return user.UserId;
         }
     }
 }

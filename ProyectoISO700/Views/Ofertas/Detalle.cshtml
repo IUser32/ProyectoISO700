@@ -5,12 +5,20 @@
 }
 <div class="container-fluid">
     <div class="page-header row" style="margin-top: 0 !important;">
-        <div class="col-md-10 col-lg-10">
+        <div class="col-md-8 col-lg-8">
             <h3><i class="fa fa-newspaper-o"></i> @Model.company <small>@Model.location</small> </h3>
         </div>
-        <div class="col-md-2 col-lg-2 text-right">
+        <div class="col-md-4 col-lg-4 text-right">
             <br />
-            @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" });
+            <form method="get" action="/Ofertas/Modificar/@Model.id">
+                @if (ViewBag.PuedeModificar)
+            {
+                    <button type="submit" id="btnModificar" class="btn btn-primary btn-custom-default">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Modificar
+                    </button>
+                }
+                @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" })
+            </form>
         </div>
     </div>
     <input type="hidden" id="id" name="id" value="@Model.id" />

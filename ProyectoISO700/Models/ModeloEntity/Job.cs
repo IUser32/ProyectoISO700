@@ -20,14 +20,16 @@ namespace ProyectoISO700.Models.ModeloEntity
         public string company { get; set; }
         public string position { get; set; }
         public string description { get; set; }
+        public string url { get; set; }
+        public byte[] logo { get; set; }
         public string location { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateUpdated { get; set; }
         public Nullable<System.DateTime> DateExpires { get; set; }
-        public string url { get; set; }
-        public byte[] logo { get; set; }
+        public int userId { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual TypeJob TypeJob { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
     }
 }

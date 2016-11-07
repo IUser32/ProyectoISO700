@@ -1,12 +1,14 @@
-﻿<form method="post" action="Registrar" id="formOffert" enctype="multipart/form-data">
+﻿@model ProyectoISO700.Models.ModelView.OfertaViewOut
+
+<form method="post" action="Modificar" id="formOffert" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="page-header row" style="margin-top: 0 !important;">
             <div class="col-md-10 col-lg-10">
-                <h3><i class="fa fa-newspaper-o"></i>  Registrar una oferta </h3>
+                <h3><i class="fa fa-newspaper-o"></i>  Modificar una oferta </h3>
             </div>
             <div class="col-md-2 col-lg-2 text-right">
                 <br />
-                    @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" })
+                @Html.ActionLink("Postea una vacante", "Registrar", null, new { @class = "btn btn-primary btn-custom-default" })
             </div>
         </div>
         @if (ViewBag.Result != null && !ViewBag.Result)
@@ -19,7 +21,7 @@
                 </div>
             </div>
         }
-        else if(ViewBag.Result != null && ViewBag.Result)
+        else if (ViewBag.Result != null && ViewBag.Result)
         {
             <div class="row">
                 <div class="col-md-12 col-lg-12">
@@ -40,7 +42,7 @@
             </div>
             <div class="col-md-4 col-lg-4">
                 <label>Compañia</label>
-                <input type="text" id="Compañia" name="Compañia" class="form-control" placeholder="Test Inc." />
+                <input type="text" id="Compañia" name="Compañia" class="form-control" placeholder="Test Inc." value="@Model.company" />
             </div>
         </div>
         <br />
@@ -51,36 +53,41 @@
             </div>
             <div class="col-md-4 col-lg-4">
                 <label>URL</label>
-                <input type="text" id="URL" name="URL" class="form-control" placeholder="http://www.test.com.do" />
+                <input type="text" id="URL" name="URL" class="form-control" placeholder="http://www.test.com.do" value="@Model.url" />
             </div>
             <div class="col-md-4 col-lg-4">
                 <label>Posición</label>
-                <input type="text" id="Posicion" name="Posicion" class="form-control" placeholder="Representante de ..." />
+                <input type="text" id="Posicion" name="Posicion" class="form-control" placeholder="Representante de ..." value="@Model.position" />
             </div>
         </div>
         <br />
         <div class="row">
             <div class="col-md-4 col-lg-4">
                 <label>Ubicación</label>
-                <input type="text" id="Ubicacion" name="Ubicacion" class="form-control" placeholder="Santo Domingo, Santiago, etc... " />
+                <input type="text" id="Ubicacion" name="Ubicacion" class="form-control" placeholder="Santo Domingo, Santiago, etc... " value="@Model.location" />
             </div>
         </div>
         <hr />
         <div class="row">
             <div class="col-md-8 col-lg-8">
                 <label>Descripción</label>
-                <textarea id="Descripcion" name="Descripcion" class="form-control" rows="6" cols="10" style="resize:none;" placeholder="Esta posicion requiere..."></textarea>
+                <textarea id="Descripcion" name="Descripcion" class="form-control" rows="6" cols="10" style="resize:none;" 
+                          placeholder="Esta posicion requiere...">@Model.description</textarea>
             </div>
         </div>
         <hr />
         <div class="row">
+            <input type="hidden" value="@Model.id" id="OfertaID" name="OfertaID" />
             <div class="col-md-8">
-                <button type="submit" id="btnRegistrar" class="btn btn-primary btn-custom-default">
-                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Registrar
+                <button type="submit" id="btnModificar" class="btn btn-primary btn-custom-default">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Modificar
                 </button>
             </div>
         </div>
     </div>
 </form>
 
-<script src="~/Scripts/ActionScripts/OfertasRegistrar.js"></script>
+<script>
+    var Valores = { Categoria: @Model.category_id, Tipo: @Model.typeID };
+</script>
+<script src="~/Scripts/ActionScripts/OfertasModificar.js"></script>

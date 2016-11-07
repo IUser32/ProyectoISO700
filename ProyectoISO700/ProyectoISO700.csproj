@@ -308,6 +308,7 @@
       <DependentUpon>BolsaEmpleoEntity.edmx</DependentUpon>
       <LastGenOutput>BolsaEmpleoEntity.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\ActionScripts\OfertasModificar.js" />
     <Content Include="Scripts\ActionScripts\OfertasRegistrar.js" />
     <Content Include="Scripts\ActionScripts\OfertasDetalle.js" />
     <Content Include="Scripts\ActionScripts\OfertasListado.js" />
@@ -391,6 +392,7 @@
     <Content Include="Views\Ofertas\_partialListado.cshtml" />
     <Content Include="Views\Ofertas\Detalle.cshtml" />
     <Content Include="Views\Ofertas\Registrar.cshtml" />
+    <Content Include="Views\Ofertas\Modificar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

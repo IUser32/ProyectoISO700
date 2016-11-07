@@ -29,7 +29,7 @@
           <Property Name="category_id" Type="int" Nullable="false" />
           <Property Name="typeID" Type="int" Nullable="false" />
           <Property Name="company" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="position" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="position" Type="nvarchar" MaxLength="50" />
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="url" Type="nvarchar" MaxLength="100" />
           <Property Name="logo" Type="image" />
@@ -37,6 +37,7 @@
           <Property Name="DateCreated" Type="datetime" />
           <Property Name="DateUpdated" Type="datetime" />
           <Property Name="DateExpires" Type="datetime" />
+          <Property Name="userId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TypeJob">
           <Key>
@@ -116,6 +117,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Job_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Job" Type="Self.Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Job">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_RoleId">
           <End Role="webpages_Roles" Type="Self.webpages_Roles" Multiplicity="1" />
           <End Role="webpages_UsersInRoles" Type="Self.webpages_UsersInRoles" Multiplicity="*" />
@@ -158,6 +171,10 @@
             <End Role="TypeJob" EntitySet="TypeJob" />
             <End Role="Job" EntitySet="Job" />
           </AssociationSet>
+          <AssociationSet Name="FK_Job_UserProfile" Association="Self.FK_Job_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Job" EntitySet="Job" />
+          </AssociationSet>
           <AssociationSet Name="fk_RoleId" Association="Self.fk_RoleId">
             <End Role="webpages_Roles" EntitySet="webpages_Roles" />
             <End Role="webpages_UsersInRoles" EntitySet="webpages_UsersInRoles" />
@@ -186,6 +203,10 @@
           </AssociationSet>
           <AssociationSet Name="FK__Job__typeID__440B1D61" Association="BolsaEmpleoModel.FK__Job__typeID__440B1D61">
             <End Role="TypeJob" EntitySet="TypeJobs" />
+            <End Role="Job" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Job_UserProfile" Association="BolsaEmpleoModel.FK_Job_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
             <End Role="Job" EntitySet="Jobs" />
           </AssociationSet>
           <AssociationSet Name="webpages_UsersInRoles" Association="BolsaEmpleoModel.webpages_UsersInRoles">
@@ -218,16 +239,18 @@
           <Property Name="category_id" Type="Int32" Nullable="false" />
           <Property Name="typeID" Type="Int32" Nullable="false" />
           <Property Name="company" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="position" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="url" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="logo" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="location" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DateCreated" Type="DateTime" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Precision="3" />
           <Property Name="DateExpires" Type="DateTime" Precision="3" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="BolsaEmpleoModel.FK__Job__category_id__4316F928" FromRole="Job" ToRole="Category" />
           <NavigationProperty Name="TypeJob" Relationship="BolsaEmpleoModel.FK__Job__typeID__440B1D61" FromRole="Job" ToRole="TypeJob" />
-          <Property Name="url" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="UserProfile" Relationship="BolsaEmpleoModel.FK_Job_UserProfile" FromRole="Job" ToRole="UserProfile" />
         </EntityType>
         <EntityType Name="TypeJob">
           <Key>
@@ -243,6 +266,7 @@
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="56" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Jobs" Relationship="BolsaEmpleoModel.FK_Job_UserProfile" FromRole="UserProfile" ToRole="Job" />
           <NavigationProperty Name="webpages_Roles" Relationship="BolsaEmpleoModel.webpages_UsersInRoles" FromRole="UserProfile" ToRole="webpages_Roles" />
         </EntityType>
         <EntityType Name="webpages_Membership">
@@ -302,6 +326,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Job_UserProfile">
+          <End Type="BolsaEmpleoModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="BolsaEmpleoModel.Job" Role="Job" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Job">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="webpages_UsersInRoles">
           <End Type="BolsaEmpleoModel.webpages_Roles" Role="webpages_Roles" Multiplicity="*" />
           <End Type="BolsaEmpleoModel.UserProfile" Role="UserProfile" Multiplicity="*" />
@@ -333,12 +369,13 @@
           <EntitySetMapping Name="Jobs">
             <EntityTypeMapping TypeName="BolsaEmpleoModel.Job">
               <MappingFragment StoreEntitySet="Job">
-                <ScalarProperty Name="logo" ColumnName="logo" />
-                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="DateExpires" ColumnName="DateExpires" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
                 <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="logo" ColumnName="logo" />
+                <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="position" ColumnName="position" />
                 <ScalarProperty Name="company" ColumnName="company" />
